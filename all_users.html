@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitBuddy | Admin users</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .ai-glow { box-shadow: 0 0 30px -5px rgba(59, 130, 246, 0.3); }
+        .plan-details summary { list-style: none; }
+        .plan-details summary::-webkit-details-marker { display: none; }
+        .plan-details[open] .plan-chevron { transform: rotate(180deg); }
+        .plan-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-blue-500 selection:text-white">
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="/" class="flex items-center space-x-3 no-underline">
+                <span class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center ai-glow" aria-hidden="true">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </span>
+                <span class="font-bold text-lg tracking-wide bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">FitBuddy Coach</span>
+            </a>
+            <nav class="flex items-center gap-4 text-sm" aria-label="Main navigation">
+                <a href="/view-all-users" aria-current="page" class="font-medium text-blue-300 hover:text-white">Admin</a>
+                <a href="/" class="font-medium text-slate-300 hover:text-white">Web User</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-10">
+        <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between mb-8">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-cyan-300 mb-2">Member records</p>
+                <h1 class="text-3xl sm:text-4xl font-bold text-white">User directory</h1>
+                <p class="text-sm text-slate-400 mt-2">Profiles and saved workout plans.</p>
+            </div>
+            <div class="glass-card ai-glow rounded-2xl px-5 py-3 flex items-center gap-3">
+                <span class="text-2xl font-bold text-cyan-300">{{ users|length }}</span>
+                <span class="text-xs uppercase tracking-wider text-slate-400">users</span>
+            </div>
+        </div>
+
+        <div class="mb-5">
+            <label for="user-search" class="sr-only">Search users</label>
+            <input id="user-search" type="search" placeholder="Search by name, goal, or user ID" class="w-full sm:max-w-md bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors">
+        </div>
+
+        <section id="user-list" class="space-y-5" aria-label="User records">
+            {% for user in users %}
+            <article class="user-record glass-card rounded-3xl p-5 sm:p-7" data-search="{{ (user.name ~ ' ' ~ user.goal ~ ' ' ~ user.intensity ~ ' ' ~ user.id)|lower }}">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <h2 class="text-xl font-semibold text-white">{{ user.name }}</h2>
+                            <span class="text-xs text-slate-400">ID {{ user.id }}</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-3">
+                            <span class="px-3 py-1 rounded-lg bg-blue-500/10 text-blue-300 border border-blue-500/20 text-xs font-medium">{{ user.goal }}</span>
+                            <span class="px-3 py-1 rounded-lg bg-slate-800 text-slate-300 text-xs font-medium">{{ user.intensity }}</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-x-8 gap-y-3 sm:min-w-56">
+                        <div><p class="text-xs text-slate-500">Age</p><p class="text-sm font-medium text-slate-200 mt-1">{{ user.age }} years</p></div>
+                        <div><p class="text-xs text-slate-500">Weight</p><p class="text-sm font-medium text-slate-200 mt-1">{{ user.weight }} kg</p></div>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-800 mt-6 pt-5">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Saved workout plans</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                        <details class="plan-details rounded-2xl border border-slate-800 bg-slate-900/50 overflow-hidden">
+                            <summary class="flex items-center justify-between gap-3 px-4 py-3 cursor-pointer text-sm font-medium text-slate-200 hover:bg-slate-800/50">
+                                <span>Generated plan</span>
+                                <svg class="plan-chevron w-4 h-4 text-cyan-300 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/></svg>
+                            </summary>
+                            <pre class="plan-text max-h-72 overflow-auto border-t border-slate-800 px-4 py-3 text-xs leading-5 text-slate-300">{{ user.original_plan }}</pre>
+                        </details>
+                        <details class="plan-details rounded-2xl border border-slate-800 bg-slate-900/50 overflow-hidden">
+                            <summary class="flex items-center justify-between gap-3 px-4 py-3 cursor-pointer text-sm font-medium text-slate-200 hover:bg-slate-800/50">
+                                <span>Latest adjusted plan</span>
+                                <svg class="plan-chevron w-4 h-4 text-cyan-300 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/></svg>
+                            </summary>
+                            <pre class="plan-text max-h-72 overflow-auto border-t border-slate-800 px-4 py-3 text-xs leading-5 text-slate-300">{{ user.updated_plan }}</pre>
+                        </details>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+            <div id="no-results" class="hidden glass-card rounded-2xl px-6 py-10 text-center text-sm text-slate-400">No users match that search.</div>
+        </section>
+    </main>
+
+    <script>
+        const searchInput = document.getElementById('user-search');
+        const userCards = [...document.querySelectorAll('.user-record')];
+        const noResults = document.getElementById('no-results');
+
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.trim().toLowerCase();
+            let visibleCount = 0;
+            userCards.forEach((card) => {
+                const matches = card.dataset.search.includes(query);
+                card.classList.toggle('hidden', !matches);
+                if (matches) visibleCount += 1;
+            });
+            noResults.classList.toggle('hidden', visibleCount > 0 || userCards.length === 0);
+        });
+    </script>
+</body>
+</html>

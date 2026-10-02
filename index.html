@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitBuddy | Personal Gym Coach</title>
+    <!-- Tailwind CSS CDN for rapid modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ai-glow {
+            box-shadow: 0 0 30px -5px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center ai-glow">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </div>
+                <span class="font-bold text-lg tracking-wide bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">FitBuddy Coach</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="/view-all-users" class="text-sm font-medium text-blue-300 hover:text-white">Admin</a>
+                <a href="/" class="text-sm font-medium text-slate-300 hover:text-white">Web User</a>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                    <span class="w-2 h-2 mr-2 bg-emerald-400 rounded-full"></span> Practical gym coaching
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="max-w-7xl mx-auto px-6 py-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Input Form Section -->
+            <div class="lg:col-span-5 glass-card p-8 rounded-3xl ai-glow">
+                <h2 class="text-xl font-semibold mb-2 text-white">Build your gym plan</h2>
+                <p class="text-sm text-slate-400 mb-6">Set your <span class="font-semibold text-cyan-300">training goal</span> and <span class="font-semibold text-cyan-300">experience level</span>. Get a practical weekly routine with exercises, sets, reps, and recovery guidance.</p>
+                
+                <form action="/generate-workout" method="POST" class="space-y-5">
+                    <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Your name</label>
+                        <input type="text" name="username" required class="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Age</label>
+                            <input type="number" name="age" required class="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Weight (kg)</label>
+                            <input type="number" step="0.1" name="weight" required class="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Main fitness goal</label>
+                        <select name="goal" class="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors">
+                            <option value="Muscle Gain">Muscle Gain / Hypertrophy</option>
+                            <option value="Fat Loss">Fat Loss / Shred</option>
+                            <option value="Endurance">Endurance & Conditioning</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Training experience</label>
+                        <select name="intensity" required class="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors">
+                            <option value="Beginner">Beginner</option>
+                            <option value="Moderate" selected>Moderate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow-lg hover:opacity-90 transition-opacity flex items-center justify-center space-x-2">
+                        <span>Build my weekly plan</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Output Display Workspace -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="glass-card p-8 rounded-3xl min-h-[450px]">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                        <h3 class="text-lg font-medium text-slate-200">Your training preview</h3>
+                        <div class="flex space-x-2">
+                            <span class="px-3 py-1 bg-slate-800 rounded-lg text-xs font-medium text-slate-300">Weekly schedule</span>
+                            <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-lg text-xs font-medium border border-blue-500/30">Coach guidance</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Dynamic Output Section where your plans render -->
+                    <div class="text-slate-300 space-y-4">
+                        <div class="p-4 rounded-2xl bg-slate-900/40 border border-slate-800/60">
+                            <p class="text-sm text-slate-400">Your <span class="font-semibold text-cyan-300">weekly gym plan</span> will appear here after you enter your details. It includes strength sessions, recovery, and practical progression guidance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>
